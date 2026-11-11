@@ -1,0 +1,12 @@
+# 必要运行工具链（已验证组合）
+# Python 3.11.5
+# PyTorch 2.7.1+das.opt1.dtk25042：DCU/HIP适配构建，安装来源见README。
+# 以下仅列基线直接使用的额外 Python 库，传递依赖由安装工具处理。
+numpy==1.26.4
+matplotlib==3.10.8
+
+# 自定义 HIP 示例编译所需（原生 PyTorch 基线无需编译）：
+# GCC 12.2.0、DTK 25.04.2（公共 module）
+# ninja 1.13.0（构建工具）
+# pybind11 绑定使用 PyTorch 随附头文件，无需单独固定安装 pybind11。
+# 内部开发环境由 pyproject.toml / uv.lock 管理，不从此清单同步。

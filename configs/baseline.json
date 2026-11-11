@@ -1,0 +1,12 @@
+{
+  "data_dir": "data",
+  "output_dir": "outputs/my-training",
+  "split_index": 1280,
+  "seed": 12345,
+  "epochs": 50,
+  "batch_size": 16,
+  "learning_rate": 0.0001,
+  "adam_epsilon": 0.0000001,
+  "device": "auto",
+  "threads": 4
+}
