@@ -17,14 +17,14 @@
 
 **1. 下载、上传并解压代码包**
 
-在本地电脑浏览器中打开[最新发布页](https://github.com/ziyang22/PRA4SWPU/releases/latest)，下载附件`PRA4SWPU-baseline-v1.6.7.zip`。该附件包含代码、公开数据及参考权重，请勿使用自动生成的`Source code`压缩包。
+在本地电脑浏览器中打开[最新发布页](https://github.com/ziyang22/PRA4SWPU/releases/latest)，下载附件`PRA4SWPU.zip`。该附件包含代码、公开数据及参考权重，请勿使用自动生成的`Source code`压缩包。
 
 使用文件传输工具将完整ZIP上传至参赛账号的个人目录，确认上传任务完成后，再在登录节点执行：
 
 ```bash
 cd "$HOME"
-unzip PRA4SWPU-baseline-v1.6.7.zip
-cd PRA4SWPU-baseline-v1.6.7
+unzip PRA4SWPU.zip
+cd PRA4SWPU
 ls -lh data/data.npy data/label.npy weights/baseline.pt
 ```
 
