@@ -13,7 +13,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from data import normalize_image
+from data import array_path, normalize_image
 from ops import ReplaceableConv2d, hip_conv2d, load_hip_extension
 from utils import load_checkpoint, metadata, seed_everything, write_json
 
@@ -111,7 +111,7 @@ def check(checkpoint, data_dir):
             raise AssertionError("Native training produced missing/nonfinite gradients")
         optimizer.step()
         result["native_training_step_bce"] = loss.item()
-    images = np.load(Path(data_dir) / "data.npy", mmap_mode="r", allow_pickle=False)
+    images = np.load(array_path(Path(data_dir) / "data.npy"), mmap_mode="r", allow_pickle=False)
     image = normalize_image(images[saved["config"]["split_index"]])
     real = torch.from_numpy(image[None, None]).to(device)
     result["models"] = []

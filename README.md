@@ -17,18 +17,20 @@
 
 **1. 下载、上传并解压代码包**
 
-在本地电脑浏览器中打开[最新发布页](https://github.com/ziyang22/PRA4SWPU/releases/latest)，下载附件`PRA4SWPU-baseline-v1.6.6.zip`。该附件包含代码、公开数据及参考权重，请勿使用自动生成的`Source code`压缩包。
+在本地电脑浏览器中打开[最新发布页](https://github.com/ziyang22/PRA4SWPU/releases/latest)，下载附件`PRA4SWPU-baseline-v1.6.7.zip`。该附件包含代码、公开数据及参考权重，请勿使用自动生成的`Source code`压缩包。
 
-使用文件传输工具将完整ZIP上传至参赛账号的个人目录，再在登录节点执行：
+使用文件传输工具将完整ZIP上传至参赛账号的个人目录，确认上传任务完成后，再在登录节点执行：
 
 ```bash
 cd "$HOME"
-unzip PRA4SWPU-baseline-v1.6.6.zip
-cd PRA4SWPU-baseline-v1.6.6
+unzip PRA4SWPU-baseline-v1.6.7.zip
+cd PRA4SWPU-baseline-v1.6.7
 ls -lh data/data.npy data/label.npy weights/baseline.pt
 ```
 
 `data.npy`和`label.npy`各约200 MiB，权重约1.9 MiB。首次解压请使用新目录，避免与旧代码或环境混用。
+
+部分传输工具可能留下`.efilePart`临时文件名。若正式数据文件缺失，程序会检查对应临时文件的大小及SHA-256；仅与官方公开数据完全一致时，通过独立副本恢复正式文件，否则停止并提示完成或重新上传。原临时文件保留，不干扰上传任务；确认上传结束后可自行删除。不得直接将未完成上传的文件改名使用。
 
 **2. 创建并激活venv环境**
 
