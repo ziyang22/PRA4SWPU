@@ -13,36 +13,64 @@
 
 基线训练、评估、预测及提交模板默认使用PyTorch原生卷积（`torch`后端），不编译或调用自定义HIP Kernel。自定义Kernel为可选开发示例，使用方法见第八节。
 
-运行环境为Linux x86_64、Python 3.11、GCC 12.2.0及DTK 25.04.2。请在参考代码包根目录安装以下依赖：
+运行环境为Linux x86_64、Python 3.11、GCC 12.2.0及DTK 25.04.2。
+
+**1. 在登录节点获取代码**
 
 ```bash
-# 安装DCU适配PyTorch、NumPy和Matplotlib
+git clone https://github.com/ziyang22/PRA4SWPU.git
+cd PRA4SWPU
+```
+
+**2. 创建并激活venv环境**
+
+以下命令在项目根目录执行，使用公共Python 3.11创建独立环境：
+
+```bash
+/public/software/apps/anaconda3/2023.09/bin/python -m venv .venv-dcu
+source .venv-dcu/bin/activate
+python -V
+```
+
+确认输出为`Python 3.11.x`后继续。环境只需创建一次；重新登录后，在项目根目录执行`source .venv-dcu/bin/activate`即可使用。
+
+**3. 安装依赖**
+
+```bash
+# 安装DCU适配PyTorch及项目依赖（含HIP示例构建工具Ninja）
 python -m pip install \
   'https://download.sourcefind.cn:65024/file/4/pytorch/DAS1.7/torch-2.7.1+das.opt1.dtk25042-cp311-cp311-manylinux_2_28_x86_64.whl' \
   -r requirements.txt
-
-# 仅编译自定义HIP示例时需要
-python -m pip install ninja==1.13.0
 ```
 
-```bash
-# 1. 在登录节点申请交互式计算资源（仅为开发申请示例）
-srun --partition=hx1hdnormal --nodes=1 --ntasks=1 \
-  --cpus-per-task=4 --gres=dcu:1 --mem=14G \
-  --time=00:20:00 --pty bash
+**4. 提交Slurm任务**
 
-# 2. 在分配的计算节点中加载公共工具链
+在项目根目录执行以下命令；提交前须激活已安装上述依赖的Python环境：
+
+```bash
+# 使用附带权重验证公开验证集（默认任务）
+sbatch scripts/baseline.slurm
+
+# 重新训练基线（默认50轮）
+sbatch scripts/baseline.slurm train
+
+# 检查可选自定义HIP接口
+sbatch scripts/baseline.slurm hip-check
+
+# 查看作业状态和日志，将<job_id>替换为提交返回的作业号
+squeue -j <job_id>
+tail -f slurm-<job_id>.log
+```
+
+脚本自动加载公共工具链并申请单张DCU、4个CPU核和14 GiB内存，分区为`hx1hdnormal`；分区与资源参数按实际账号配额调整。日志写入项目根目录的`slurm-<job_id>.log`，验证、训练或HIP检查结果分别写入`outputs/slurm-<job_id>/evaluation/`、`training/`或`hip-check.json`。日志中的`BASELINE_JOB=passed`表示该任务执行成功，正式计分仍按第五节的评测流程进行。
+
+需要在已分配的计算资源内直接运行时，可使用：
+
+```bash
 module load compiler/gcc/12.2.0 compiler/dtk/25.04.2
 export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
-
-# 3. 检查环境（DCU沿用PyTorch的cuda设备标识）
-python -c 'import torch; print("PyTorch:", torch.__version__, "HIP:", torch.version.hip); assert torch.version.hip and torch.cuda.is_available(), "DCU不可用"; print("Device:", torch.cuda.get_device_name(0))'
-
-# 4. 直接使用附带权重验证公开验证集，无需先训练
 python src/main.py evaluate --checkpoint weights/baseline.pt \
   --data-dir data --backend torch --device cuda --output outputs/my-evaluation
-
-# 5. 按需重新训练基线（默认50轮；输出目录须为新目录）
 python src/main.py train --config configs/baseline.json \
   --device cuda --output-dir outputs/my-baseline
 ```
