@@ -15,21 +15,20 @@
 
 运行环境为Linux x86_64、Python 3.11、GCC 12.2.0及DTK 25.04.2。
 
-**1. 在登录节点获取代码**
+**1. 下载、上传并解压代码包**
 
-使用发布页中的完整代码包，包含代码、公开数据与参考权重，无需另行配置Git LFS。请下载命名为`PRA4SWPU-baseline-v1.6.5.zip`的附件，不使用GitHub自动生成的`Source code`压缩包。
+在本地电脑浏览器中打开[最新发布页](https://github.com/ziyang22/PRA4SWPU/releases/latest)，下载附件`PRA4SWPU-baseline-v1.6.6.zip`。该附件包含代码、公开数据及参考权重，请勿使用自动生成的`Source code`压缩包。
+
+使用文件传输工具将完整ZIP上传至参赛账号的个人目录，再在登录节点执行：
 
 ```bash
 cd "$HOME"
-curl -fL --retry 3 \
-  https://github.com/ziyang22/PRA4SWPU/releases/download/v1.6.5/PRA4SWPU-baseline-v1.6.5.zip \
-  -o PRA4SWPU-baseline-v1.6.5.zip
-unzip PRA4SWPU-baseline-v1.6.5.zip
-cd PRA4SWPU-baseline-v1.6.5
+unzip PRA4SWPU-baseline-v1.6.6.zip
+cd PRA4SWPU-baseline-v1.6.6
 ls -lh data/data.npy data/label.npy weights/baseline.pt
 ```
 
-`data.npy`和`label.npy`各约200 MiB，权重约1.9 MiB；若数据文件只有百余字节，则尚未获取实际数组。首次解压请使用新目录，避免与旧代码或环境混用。
+`data.npy`和`label.npy`各约200 MiB，权重约1.9 MiB。首次解压请使用新目录，避免与旧代码或环境混用。
 
 **2. 创建并激活venv环境**
 
